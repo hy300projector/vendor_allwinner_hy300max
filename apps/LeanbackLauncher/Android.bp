@@ -1,0 +1,47 @@
+// LeanbackLauncher, the default launcher for the HY300MAX.
+//
+// Vendored from the LeanbackLauncher-main Gradle project's :app module. It
+// declares itself as a home app and overrides the AOSP handheld launchers, so
+// packaging it is enough to make it the launcher: Launcher3, Launcher3QuickStep
+// and any Go variant that a product inherits are dropped from the image by the
+// overrides list (device.mk also filters them out of PRODUCT_PACKAGES, which
+// covers products that pull them in through an inherited .mk).
+
+android_app {
+    name: "LeanbackLauncher",
+    manifest: "AndroidManifest.xml",
+    srcs: ["java/**/*.java"],
+    resource_dirs: ["res"],
+
+    // system/priv-app, platform-signed: the manifest asks for privileged
+    // permissions (BIND_APPWIDGET, WRITE_SETTINGS, SET_WALLPAPER) that a
+    // launcher needs.
+    privileged: true,
+    certificate: "platform",
+    platform_apis: true,
+
+    overrides: [
+        "Launcher2",
+        "Launcher3",
+        "Launcher3Go",
+        "Launcher3QuickStep",
+        "Launcher3QuickStepGo",
+        "TvLauncher",
+    ],
+
+    static_libs: [
+        // The all-apps drawer.
+        "Launcher3M",
+        "androidx.appcompat_appcompat",
+        "androidx.core_core",
+        "androidx.leanback_leanback",
+        "androidx.recyclerview_recyclerview",
+    ],
+
+    // The Gradle build used no shrinking; keep the debug-friendly default
+    // rather than letting proguard strip code the launcher reaches by
+    // reflection.
+    optimize: {
+        enabled: false,
+    },
+}

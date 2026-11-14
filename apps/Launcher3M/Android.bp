@@ -1,0 +1,27 @@
+// Launcher3 (Marshmallow) sources used by LeanbackLauncher's all-apps drawer.
+//
+// Vendored from the LeanbackLauncher-main Gradle project (launcher3-m module)
+// so the launcher builds entirely from this tree. The Gradle module had no
+// manifest, so a minimal one exists to give the resources their package.
+
+android_library {
+    name: "Launcher3M",
+    manifest: "AndroidManifest.xml",
+    srcs: ["java/**/*.java"],
+    resource_dirs: ["res"],
+
+    // The Gradle module's implementation() dependencies, mapped to the
+    // androidx prebuilts this tree ships. legacy-support-v4, palette and
+    // cardview were declared there but no source imports them.
+    static_libs: [
+        "androidx.appcompat_appcompat",
+        "androidx.core_core",
+        "androidx.customview_customview",
+        "androidx.recyclerview_recyclerview",
+        // backup/nano/*.java: generated LaunchBackupProtos classes.
+        "libprotobuf-java-nano",
+    ],
+
+    sdk_version: "current",
+    min_sdk_version: "21",
+}
